@@ -1,63 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Photography</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Modular photography prompt builder" />
+  <title>Photography Prompt Builder</title>
+  <link rel="stylesheet" href="./css/style.css" />
+  <script type="module" src="./js/app.js"></script>
 </head>
 <body>
-    <h1>Photography</h1>
+  <main class="page">
+    <header class="page-header">
+      <p class="eyebrow">PROMPT STUDIO</p>
+      <h1>Photography</h1>
+      <p class="subtitle">Choose photo editing instructions. Every option can provide its own sentence or paragraph.</p>
+    </header>
 
-    <ul>
-        <li>
-            <label>
-                <input type="radio" name="quality"
-                       value="highly realistic">
-                Highly Realistic
-            </label>
-        </li>
-        <li>
-            <label>
-                <input type="radio" name="quality"
-                       value="ultra-realistic">
-                Ultra-Realistic
-            </label>
-        </li>
-        <li>
-            <label>
-                <input type="radio" name="quality"
-                       value="professional">
-                Professional
-            </label>
-        </li>
-    </ul>
+    <div class="layout">
+      <section class="settings-panel" aria-label="Photography settings">
+        <div id="categoriesContainer"></div>
+      </section>
 
-    <p>
-        Edit the uploaded photo into a
-        <span id="qualityTextContent"></span>
-        [style] photograph in [aspect_ratio] format,
-        captured [shoot_style] with a [device].
-    </p>
-
-    <script>
-      
-const radios = document.querySelectorAll(
-    'input[name="quality"], input[name="style"]'
-);
-
-radios.forEach(radio => {
-    radio.addEventListener("change", function() {
-        if (this.checked) {
-            const text = document.getElementById(
-                this.name + "TextContent"
-            );
-
-            if (text) {
-                text.textContent = this.value;
-            }
-        }
-    });
-});
-
-    </script>
+      <aside class="prompt-panel" aria-label="Generated prompt">
+        <div class="prompt-header">
+          <h2>Generated Prompt</h2>
+          <button type="button" id="copyButton" class="copy-button">Copy Prompt</button>
+        </div>
+        <p id="generatedPrompt" aria-live="polite"></p>
+        <p id="feedback" class="feedback" role="status"></p>
+      </aside>
+    </div>
+  </main>
 </body>
 </html>

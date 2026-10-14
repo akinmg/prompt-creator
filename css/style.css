@@ -1,0 +1,28 @@
+:root { color-scheme: light; font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #f6f7f9; color: #17202c; }
+* { box-sizing: border-box; }
+body { margin: 0; }
+button, input { font: inherit; }
+.page { max-width: 1200px; padding: 32px 20px 80px; margin: 0 auto; }
+.page-header { margin-bottom: 26px; }
+.eyebrow { font-size: 12px; font-weight: 750; letter-spacing: 0.16em; color: #596780; }
+h1 { font-size: clamp(2rem, 4vw, 3.2rem); margin: 6px 0; letter-spacing: -0.035em; }
+.subtitle { color: #657186; margin: 0; }
+.layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(320px, 0.92fr); gap: 22px; align-items: start; }
+.settings-panel, .prompt-panel { background: white; border: 1px solid #e4e8ef; border-radius: 16px; padding: 24px; box-shadow: 0 9px 28px rgba(21, 34, 54, 0.035); }
+.category { padding: 0 0 23px; margin: 0 0 24px; border: 0; border-bottom: 1px solid #e8ecf2; min-width: 0; }
+.category:last-child { border-bottom: 0; margin-bottom: 0; padding-bottom: 0; }
+.category-title { font-size: 17px; font-weight: 700; padding: 0; margin-bottom: 12px; }
+.options { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 8px; }
+.option { display: flex; gap: 10px; align-items: center; padding: 12px; border: 1px solid #e3e7ef; border-radius: 10px; cursor: pointer; transition: background 140ms, border-color 140ms; }
+.option:has(input:checked) { background: #eff4ff; border-color: #6d91ed; }
+.option:focus-within { outline: 2px solid #85a3ed; outline-offset: 2px; }
+.option input { accent-color: #385fca; width: 16px; height: 16px; margin: 0; }
+.option span { font-size: 14px; }
+.prompt-panel { position: sticky; top: 20px; }
+.prompt-header { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+h2 { margin: 0; font-size: 19px; }
+.copy-button { background: #17202c; color: white; border: 0; border-radius: 9px; padding: 10px 15px; cursor: pointer; white-space: nowrap; }
+.copy-button:hover { background: #34465f; }
+#generatedPrompt { white-space: pre-wrap; line-height: 1.7; overflow-wrap: anywhere; color: #374151; font-size: 14px; }
+.feedback { min-height: 20px; margin: 0; font-size: 13px; color: #4267b2; }
+@media (max-width: 800px) { .layout { grid-template-columns: 1fr; } .prompt-panel { position: static; } }
