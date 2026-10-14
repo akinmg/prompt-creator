@@ -1,15 +1,11 @@
 import {  photographyConfig,  phisicalPropertyConfig,  visibilityConfig
 } from "./config/index.js";
 
-
-
 // ==========================================
 
 // DOM ELEMENTS
 
 // ==========================================
-
-
 
 const promptElement = document.getElementById("generatedPrompt");
 
@@ -17,15 +13,11 @@ const copyButton = document.getElementById("copyButton");
 
 const feedbackElement = document.getElementById("feedback");
 
-
-
 // ==========================================
 
 // MODULE CONFIGURATION
 
 // ==========================================
-
-
 
 // Yeni modülleri sadece buraya ekle
 
@@ -37,15 +29,11 @@ const moduleConfigs = {
 
   visibility:visibilityConfig
 
-
-
   // lighting: lightingConfig,
 
   // camera: cameraConfig,
 
 };
-
-
 
 // ==========================================
 
@@ -53,13 +41,9 @@ const moduleConfigs = {
 
 // ==========================================
 
-
-
 const switchStates = {};
 
 const selectedValues = {};
-
-
 
 // Her modül için başlangıç değerleri
 
@@ -71,15 +55,11 @@ for (const [moduleId, config] of Object.entries(moduleConfigs)) {
 
   );
 
-
-
   switchStates[moduleId] = switchElement
 
     ? switchElement.checked
 
     : false;
-
-
 
   selectedValues[moduleId] = Object.fromEntries(
 
@@ -95,21 +75,15 @@ for (const [moduleId, config] of Object.entries(moduleConfigs)) {
 
 }
 
-
-
 // ==========================================
 
 // CONFIG VALIDATION
 
 // ==========================================
 
-
-
 function validateConfig() {
 
   for (const [moduleId, config] of Object.entries(moduleConfigs)) {
-
-
 
     if (!Array.isArray(config)) {
 
@@ -121,15 +95,9 @@ function validateConfig() {
 
     }
 
-
-
     const ids = new Set();
 
-
-
     for (const category of config) {
-
-
 
       if (!category.id || ids.has(category.id)) {
 
@@ -141,11 +109,7 @@ function validateConfig() {
 
       }
 
-
-
       ids.add(category.id);
-
-
 
       if (
 
@@ -163,11 +127,7 @@ function validateConfig() {
 
       }
 
-
-
       const values = new Set();
-
-
 
       for (const option of category.options) {
 
@@ -181,13 +141,9 @@ function validateConfig() {
 
         }
 
-
-
         values.add(option.value);
 
       }
-
-
 
       if (
 
@@ -213,27 +169,19 @@ function validateConfig() {
 
 }
 
-
-
 // ==========================================
 
 // RENDER CATEGORIES
 
 // ==========================================
 
-
-
 function renderCategories(moduleId, config) {
-
-
 
   const container = document.querySelector(
 
     `[data-module-content="${moduleId}"]`
 
   );
-
-
 
   if (!container) {
 
@@ -247,43 +195,49 @@ function renderCategories(moduleId, config) {
 
   }
 
-
-
   const fragment = document.createDocumentFragment();
-
-
+  const sections = moduleId === "phisicalProperty" ? [
+    { title: "Subject & framing", ids: ["Subject Age", "Subject Gender", "Position In Frame", "Shot Type"] },
+    { title: "Body & proportions", ids: ["Body Frame", "Height Impression", "Body Build", "Arm Shape", "Thigh Shape", "Waist Shape", "Proportion Style"] },
+    { title: "Skin", ids: ["Skin Tone", "Skin Color Detail", "Tan Level", "Skin Texture"] },
+    { title: "Avoid", ids: ["Avoid Body Shape", "Avoid Waist", "Avoid Leg Shape"] }
+  ] : [];
+  const targets = new Map();
+  for (const [index, section] of sections.entries()) {
+    const details = document.createElement("details");
+    details.className = "category-section";
+    details.open = index === 0;
+    const summary = document.createElement("summary");
+    summary.textContent = `${section.title} (${section.ids.length})`;
+    const grid = document.createElement("div");
+    grid.className = "categories-grid";
+    details.append(summary, grid);
+    fragment.append(details);
+    for (const id of section.ids) targets.set(id, grid);
+  }
+  // New categories still render without needing a group definition.
+  const ungrouped = document.createElement("div");
+  ungrouped.className = "categories-grid";
 
   for (const category of config) {
-
-
 
     const group = document.createElement("div");
 
     group.className = "category";
 
-
-
     const label = document.createElement("label");
 
     label.className = "category-label";
 
-
-
     const selectId = `category-${moduleId}-${category.id}`;
-
-
 
     label.htmlFor = selectId;
 
     label.textContent = category.title;
 
-
-
     const wrapper = document.createElement("div");
 
     wrapper.className = "select-wrap";
-
-
 
     const select = document.createElement("select");
 
@@ -293,29 +247,19 @@ function renderCategories(moduleId, config) {
 
     select.name = `${moduleId}-${category.id}`;
 
-
-
     for (const option of category.options) {
 
       const item = document.createElement("option");
-
-
 
       item.value = option.value;
 
       item.textContent = option.label;
 
-
-
       select.appendChild(item);
 
     }
 
-
-
     select.value = selectedValues[moduleId][category.id];
-
-
 
     select.addEventListener("change", () => {
 
@@ -325,23 +269,18 @@ function renderCategories(moduleId, config) {
 
     });
 
-
-
     wrapper.appendChild(select);
 
     group.append(label, wrapper);
 
-    fragment.appendChild(group);
+    (targets.get(category.id) || ungrouped).appendChild(group);
 
   }
 
-
-
+  if (ungrouped.childElementCount) fragment.appendChild(ungrouped);
   container.replaceChildren(fragment);
 
 }
-
-
 
 // ==========================================
 
@@ -349,11 +288,7 @@ function renderCategories(moduleId, config) {
 
 // ==========================================
 
-
-
 function updateModuleVisibility(moduleId) {
-
-
 
   const container = document.querySelector(
 
@@ -361,27 +296,22 @@ function updateModuleVisibility(moduleId) {
 
   );
 
-
-
   const switchElement = document.querySelector(
 
     `[data-module-switch="${moduleId}"]`
 
   );
 
-
-
   const enabled = switchStates[moduleId];
-
-
 
   if (container) {
 
-    container.hidden = !enabled;
+    // Inclusion in the prompt is independent from panel expansion.
+    container.querySelectorAll("select").forEach(select => {
+      select.disabled = !enabled;
+    });
 
   }
-
-
 
   if (switchElement) {
 
@@ -391,31 +321,21 @@ function updateModuleVisibility(moduleId) {
 
 }
 
-
-
 // ==========================================
 
 // SWITCH EVENT LISTENERS
 
 // ==========================================
 
-
-
 function initializeSwitches() {
 
-
-
   for (const moduleId of Object.keys(moduleConfigs)) {
-
-
 
     const switchElement = document.querySelector(
 
       `[data-module-switch="${moduleId}"]`
 
     );
-
-
 
     if (!switchElement) {
 
@@ -429,25 +349,15 @@ function initializeSwitches() {
 
     }
 
-
-
     switchElement.addEventListener("change", () => {
 
-
-
       switchStates[moduleId] = switchElement.checked;
-
-
 
       updateModuleVisibility(moduleId);
 
       updatePrompt();
 
-
-
     });
-
-
 
     updateModuleVisibility(moduleId);
 
@@ -455,29 +365,19 @@ function initializeSwitches() {
 
 }
 
-
-
 // ==========================================
 
 // PROMPT GENERATOR
 
 // ==========================================
 
-
-
 function buildPrompt() {
 
-
-
   const pieces = [];
-
-
 
   // Tüm aktif modülleri dolaş
 
   for (const [moduleId, config] of Object.entries(moduleConfigs)) {
-
-
 
     // Kapalı modülleri atla
 
@@ -487,27 +387,19 @@ function buildPrompt() {
 
     }
 
-
-
     // İlgili modülün kategorilerini dolaş
 
     for (const category of config) {
 
-
-
       const selectedValue =
 
         selectedValues[moduleId][category.id];
-
-
 
       const choice = category.options.find(
 
         option => option.value === selectedValue
 
       );
-
-
 
       if (
 
@@ -525,8 +417,6 @@ function buildPrompt() {
 
   }
 
-
-
   // Hiçbir aktif prompt yoksa boş döndür
 
   if (pieces.length === 0) {
@@ -534,8 +424,6 @@ function buildPrompt() {
     return "";
 
   }
-
-
 
   return [
 
@@ -547,29 +435,19 @@ function buildPrompt() {
 
 }
 
-
-
 // ==========================================
 
 // UPDATE PROMPT
 
 // ==========================================
 
-
-
 function updatePrompt() {
 
-
-
   if (!promptElement) return;
-
-
 
   promptElement.textContent = buildPrompt();
 
 }
-
-
 
 // ==========================================
 
@@ -577,11 +455,7 @@ function updatePrompt() {
 
 // ==========================================
 
-
-
 function initializeCopyButton() {
-
-
 
   if (!copyButton || !feedbackElement) {
 
@@ -589,15 +463,9 @@ function initializeCopyButton() {
 
   }
 
-
-
   copyButton.addEventListener("click", async () => {
 
-
-
     const prompt = buildPrompt();
-
-
 
     if (!prompt.trim()) {
 
@@ -609,19 +477,13 @@ function initializeCopyButton() {
 
     }
 
-
-
     try {
 
       await navigator.clipboard.writeText(prompt);
 
-
-
       feedbackElement.textContent =
 
         "Prompt copied.";
-
-
 
     } catch {
 
@@ -635,30 +497,22 @@ function initializeCopyButton() {
 
 }
 
-
-
 // ==========================================
-// DYNAMIC MODULE LAYER MANAGER
+// MODULE EXPANSION
 // ==========================================
 
-function initializeModuleLayers() {
-  const modulesPanel = document.querySelector(".modules-panel");
-  if (!modulesPanel) return;
-
-  function bringToFront(card) {
-    if (!card) return;
-    // Keep stacking values bounded, regardless of click count.
-    modulesPanel.querySelectorAll(".module-card").forEach(item => {
-      item.style.zIndex = item === card ? "10" : "1";
+function initializeModuleToggles() {
+  document.querySelectorAll(".module-toggle").forEach(button => {
+    const container = document.getElementById(button.getAttribute("aria-controls"));
+    if (!container) return;
+    const setExpanded = expanded => {
+      button.setAttribute("aria-expanded", String(expanded));
+      container.hidden = !expanded;
+    };
+    setExpanded(button.closest(".module-card").dataset.module === "photography");
+    button.addEventListener("click", () => {
+      setExpanded(button.getAttribute("aria-expanded") !== "true");
     });
-  }
-
-  modulesPanel.addEventListener("pointerdown", event => {
-    bringToFront(event.target.closest(".module-card"));
-  });
-
-  modulesPanel.addEventListener("focusin", event => {
-    bringToFront(event.target.closest(".module-card"));
   });
 }
 
@@ -668,17 +522,11 @@ function initializeModuleLayers() {
 
 // ==========================================
 
-
-
 function initializeApp() {
-
-
 
   // Validate all configurations
 
   validateConfig();
-
-
 
   // Render every module
 
@@ -688,26 +536,19 @@ function initializeApp() {
 
   }
 
-
-
   // Initialize switches
 
   initializeSwitches();
-
-
+  initializeModuleToggles();
 
   // Initialize copy functionality
 
   initializeCopyButton();
-
-
 
   // Generate initial prompt
 
   updatePrompt();
 
 }
-
-
 
 initializeApp();
