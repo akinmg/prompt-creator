@@ -1,1 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Photography</title>
+</head>
+<body>
+    <h1>Photography</h1>
 
+    <ul>
+        <li>
+            <label>
+                <input type="radio" name="quality"
+                       value="highly realistic">
+                Highly Realistic
+            </label>
+        </li>
+        <li>
+            <label>
+                <input type="radio" name="quality"
+                       value="ultra-realistic">
+                Ultra-Realistic
+            </label>
+        </li>
+        <li>
+            <label>
+                <input type="radio" name="quality"
+                       value="professional">
+                Professional
+            </label>
+        </li>
+    </ul>
+
+    <p>
+        Edit the uploaded photo into a
+        <span id="qualityTextContent"></span>
+        [style] photograph in [aspect_ratio] format,
+        captured [shoot_style] with a [device].
+    </p>
+
+    <script>
+      
+const radios = document.querySelectorAll(
+    'input[name="quality"], input[name="style"]'
+);
+
+radios.forEach(radio => {
+    radio.addEventListener("change", function() {
+        if (this.checked) {
+            const text = document.getElementById(
+                this.name + "TextContent"
+            );
+
+            if (text) {
+                text.textContent = this.value;
+            }
+        }
+    });
+});
+
+    </script>
+</body>
+</html>
