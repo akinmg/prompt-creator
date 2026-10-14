@@ -1,4 +1,4 @@
-// Main functionality. New categories do not require changes in this file.
+// Main engine. To add categories or prompt sentences, edit only js/config/*.js and js/config/index.js.
 import { photographyConfig } from "./config/index.js";
 
 const container = document.getElementById("categoriesContainer");
@@ -6,7 +6,6 @@ const promptElement = document.getElementById("generatedPrompt");
 const copyButton = document.getElementById("copyButton");
 const feedbackElement = document.getElementById("feedback");
 
-// Keep selections independent from the DOM, using category IDs as keys.
 const selectedValues = Object.fromEntries(
   photographyConfig.map(category => [category.id, category.defaultValue])
 );
@@ -18,10 +17,10 @@ function validateConfig() {
     ids.add(category.id);
     if (!Array.isArray(category.options) || category.options.length === 0) throw new Error(`Missing options: ${category.id}`);
     if (!category.options.some(option => option.value === category.defaultValue)) throw new Error(`Invalid defaultValue: ${category.id}`);
-    const optionValues = new Set();
+    const values = new Set();
     for (const option of category.options) {
-      if (optionValues.has(option.value)) throw new Error(`Duplicate option value in ${category.id}: ${option.value}`);
-      optionValues.add(option.value);
+      if (values.has(option.value)) throw new Error(`Duplicate option value in ${category.id}: ${option.value}`);
+      values.add(option.value);
     }
   }
 }
@@ -30,53 +29,46 @@ function renderCategories() {
   const fragment = document.createDocumentFragment();
 
   for (const category of photographyConfig) {
-    const fieldset = document.createElement("fieldset");
-    fieldset.className = "category";
+    const group = document.createElement("div");
+    group.className = "category";
 
-    const legend = document.createElement("legend");
-    legend.className = "category-title";
-    legend.textContent = category.title;
-    fieldset.appendChild(legend);
+    const label = document.createElement("label");
+    label.className = "category-label";
+    label.htmlFor = `category-${category.id}`;
+    label.textContent = category.title;
 
-    const optionsWrapper = document.createElement("div");
-    optionsWrapper.className = "options";
+    const wrapper = document.createElement("div");
+    wrapper.className = "select-wrap";
+    const select = document.createElement("select");
+    select.className = "category-select";
+    select.id = `category-${category.id}`;
+    select.name = category.id;
 
     for (const option of category.options) {
-      const label = document.createElement("label");
-      label.className = "option";
-
-      const radio = document.createElement("input");
-      radio.type = "radio";
-      radio.name = category.id;
-      radio.value = option.value;
-      radio.checked = selectedValues[category.id] === option.value;
-      radio.addEventListener("change", () => {
-        if (!radio.checked) return;
-        selectedValues[category.id] = option.value;
-        updatePrompt();
-      });
-
-      const text = document.createElement("span");
-      text.textContent = option.label;
-      label.append(radio, text);
-      optionsWrapper.appendChild(label);
+      const item = document.createElement("option");
+      item.value = option.value;
+      item.textContent = option.label;
+      select.appendChild(item);
     }
+    select.value = selectedValues[category.id];
+    select.addEventListener("change", () => {
+      selectedValues[category.id] = select.value;
+      updatePrompt();
+    });
 
-    fieldset.appendChild(optionsWrapper);
-    fragment.appendChild(fieldset);
+    wrapper.appendChild(select);
+    group.append(label, wrapper);
+    fragment.appendChild(group);
   }
-
   container.replaceChildren(fragment);
 }
 
 function buildPrompt() {
   const pieces = ["Edit the uploaded photograph according to the following instructions:"];
-
   for (const category of photographyConfig) {
-    const selected = category.options.find(option => option.value === selectedValues[category.id]);
-    if (selected?.prompt?.trim()) pieces.push(selected.prompt.trim());
+    const choice = category.options.find(option => option.value === selectedValues[category.id]);
+    if (typeof choice?.prompt === "string" && choice.prompt.trim()) pieces.push(choice.prompt.trim());
   }
-
   return pieces.join("\n\n");
 }
 
@@ -89,7 +81,7 @@ copyButton.addEventListener("click", async () => {
     await navigator.clipboard.writeText(buildPrompt());
     feedbackElement.textContent = "Prompt copied.";
   } catch {
-    feedbackElement.textContent = "Unable to copy automatically. Select and copy the prompt text.";
+    feedbackElement.textContent = "Copy unavailable. Select the prompt text to copy manually.";
   }
 });
 

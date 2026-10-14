@@ -10,25 +10,27 @@
 </head>
 <body>
   <main class="page">
-    <header class="page-header">
-      <p class="eyebrow">PROMPT STUDIO</p>
-      <h1>Photography</h1>
-      <p class="subtitle">Choose photo editing instructions. Every option can provide its own sentence or paragraph.</p>
-    </header>
-
     <div class="layout">
-      <section class="settings-panel" aria-label="Photography settings">
-        <div id="categoriesContainer"></div>
+      <section class="photography-card" aria-labelledby="photographyTitle">
+        <header class="card-header">
+          <p class="eyebrow">PROMPT STUDIO</p>
+          <h1 id="photographyTitle">Photography</h1>
+          <p class="subtitle">Customize your photo with the settings below.</p>
+        </header>
+        <div id="categoriesContainer" class="categories-grid"></div>
       </section>
 
-      <aside class="prompt-panel" aria-label="Generated prompt">
+      <section class="prompt-card" aria-labelledby="promptTitle">
         <div class="prompt-header">
-          <h2>Generated Prompt</h2>
-          <button type="button" id="copyButton" class="copy-button">Copy Prompt</button>
+          <div>
+            <p class="eyebrow">LIVE PREVIEW</p>
+            <h2 id="promptTitle">Generated Prompt</h2>
+          </div>
+          <button type="button" id="copyButton" class="copy-button">Copy prompt</button>
         </div>
         <p id="generatedPrompt" aria-live="polite"></p>
-        <p id="feedback" class="feedback" role="status"></p>
-      </aside>
+        <p id="feedback" class="feedback" role="status" aria-live="polite"></p>
+      </section>
     </div>
   </main>
 </body>
