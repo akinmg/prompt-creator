@@ -16,99 +16,124 @@
 </head>
 
 <body>
-  <main class="page">
-    <div class="layout">
+  
+<main class="page">
+  <div class="layout">
+
+    <div class="modules-panel">
 
       <!-- PHOTOGRAPHY -->
-      <section
-        class="photography-card"
-        data-module="photography"
-      >
-        <div class="photography-header">
-          <h2>Photography</h2>
+      <section class="module-card"
+               data-module="photography">
+
+        <div class="module-header">
+          <button class="module-toggle"
+                  type="button"
+                  aria-expanded="false"
+                  aria-controls="photographyCategoriesContainer">
+            <span class="module-chevron">›</span>
+            Photography
+          </button>
 
           <label class="switch">
-            <input
-              type="checkbox"
-              id="photographySwitch"
-              data-module-switch="photography"
-              checked
-              aria-label="Enable Photography"
-            />
+            <input type="checkbox"
+                   id="photographySwitch"
+                   data-module-switch="photography"
+                   checked
+                   aria-label="Enable Photography">
             <span class="switch-slider"></span>
           </label>
         </div>
 
-        <div
-          id="photographyCategoriesContainer"
-          class="categories-container"
-          data-module-content="photography"
-        ></div>
-      </section>
+        <div id="photographyCategoriesContainer"
+             class="categories-container module-content"
+             data-module-content="photography"
+             hidden></div>
 
+      </section>
 
       <!-- PHYSICAL PROPERTIES -->
-      <section
-        class="photography-card"
-        data-module="phisicalProperty"
-      >
-        <div class="photography-header">
-          <h2>Physical Properties</h2>
+      <section class="module-card"
+               data-module="phisicalProperty">
+
+        <div class="module-header">
+          <button class="module-toggle"
+                  type="button"
+                  aria-expanded="false"
+                  aria-controls="phisicalPropertyCategoriesContainer">
+            <span class="module-chevron">›</span>
+            Physical Properties
+          </button>
 
           <label class="switch">
-            <input
-              type="checkbox"
-              id="phisicalPropertySwitch"
-              data-module-switch="phisicalProperty"
-              checked
-              aria-label="Enable Physical Properties"
-            />
+            <input type="checkbox"
+                   id="phisicalPropertySwitch"
+                   data-module-switch="phisicalProperty"
+                   checked
+                   aria-label="Enable Physical Properties">
             <span class="switch-slider"></span>
           </label>
         </div>
 
-        <div
-          id="phisicalPropertyCategoriesContainer"
-          class="categories-container"
-          data-module-content="phisicalProperty"
-        ></div>
+        <div id="phisicalPropertyCategoriesContainer"
+             class="categories-container module-content"
+             data-module-content="phisicalProperty"
+             hidden></div>
+
       </section>
+      <!-- VISIBILITY PROPERTIES -->
+      <section class="module-card"
+               data-module="visibility">
 
-
-      <!-- GENERATED PROMPT -->
-      <section
-        class="prompt-card"
-        aria-labelledby="promptTitle"
-      >
-        <div class="prompt-header">
-          <div>
-            <p class="eyebrow">LIVE PREVIEW</p>
-            <h2 id="promptTitle">Generated Prompt</h2>
-          </div>
-
-          <button
-            type="button"
-            id="copyButton"
-            class="copy-button"
-          >
-            Copy prompt
+        <div class="module-header">
+          <button class="module-toggle"
+                  type="button"
+                  aria-expanded="false"
+                  aria-controls="visibilityCatagoriesContainer">
+            <span class="module-chevron">›</span>
+            Physical Properties
           </button>
+
+          <label class="switch">
+            <input type="checkbox"
+                   id="visibilitySwitch"
+                   data-module-switch="visibility"
+                   checked
+                   aria-label="Enable Visibility">
+            <span class="switch-slider"></span>
+          </label>
         </div>
 
-        <p
-          id="generatedPrompt"
-          aria-live="polite"
-        ></p>
+        <div id="visibilityCatagoriesContainer"
+             class="categories-container module-content"
+             data-module-content="visibility"
+             hidden></div>
 
-        <p
-          id="feedback"
-          class="feedback"
-          role="status"
-          aria-live="polite"
-        ></p>
       </section>
 
     </div>
-  </main>
+
+    <!-- GENERATED PROMPT -->
+    <section class="prompt-card">
+      <div class="prompt-header">
+        <h2>Generated Prompt</h2>
+        <button type="button"
+                id="copyButton"
+                class="copy-button">
+          Copy
+        </button>
+      </div>
+
+      <p id="generatedPrompt"
+         aria-live="polite"></p>
+
+      <p id="feedback"
+         class="feedback"
+         role="status"></p>
+    </section>
+
+  </div>
+</main>
+
 </body>
 </html>
