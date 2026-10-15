@@ -1,30 +1,53 @@
 # Photography Prompt Builder
 
-Build a photography prompt using native HTML select menus. No build step or dependencies are required.
+A dependency-free, modular prompt builder powered by native JavaScript ES modules.
 
-## Files
+## Architecture
 
-- `index.html` — page structure and prompt output.
-- `src/app.js` — renders menus and updates the prompt preview.
-- `src/modules/photography/index.js` — selected values, validation, and change events.
-- `src/modules/photography/library/options.js` — menu definitions, order, and default values.
-- `src/modules/photography/library/types.js` — available labels and values.
-- `src/modules/photography/library/prompt.js` — prompt sentence generation.
+- `src/app.js` — application bootstrap only.
+- `src/modules/index.js` — the single module registration list.
+- `src/core/moduleRegistry.js` — validates and registers modules.
+- `src/core/store.js` — stores selected values, validates updates and notifies subscribers.
+- `src/core/promptEngine.js` — combines module prompts in registration order.
+- `src/ui/menuRenderer.js` — renders native select controls for all modules.
+- `src/ui/promptRenderer.js` — displays the combined prompt.
+- `src/modules/photography/library/` — Photography option definitions and pure prompt generation.
 
-## Add a category
+## Add a module
 
-1. Export its option list from `types.js`.
-2. Import the list into `options.js` and add a menu with `id`, `label`, `options`, and a valid `defaultValue`.
-3. Update `generatePrompt` in `prompt.js` to include the new category's value.
+Create `src/modules/my-module/index.js` exporting a default object:
 
-Menus are rendered automatically from the definitions in `options.js`.
+```js
+export default {
+  id: "lighting",
+  title: "Lighting",
+  menus: [
+    { id: "light", label: "Light", defaultValue: "soft", options: [
+      { label: "Soft", value: "soft" },
+      { label: "Hard", value: "hard" },
+    ] },
+  ],
+  generatePrompt: state => `Lighting: ${state.light}.`,
+};
+```
 
-## Run locally
+Import the module into `src/modules/index.js` and append it to the `modules` array.
+No changes to `app.js`, core logic, or HTML are needed. Module IDs and menu IDs must be unique within their respective scopes. Default values must be among the menu options.
 
-Serve the repository root over HTTP because the project uses ES modules:
+## Run
 
-```bash
+Serve the repository root over HTTP (ES modules cannot be used via `file://`):
+
+```sh
 python -m http.server 8000
 ```
 
-Open http://localhost:8000. Changing a menu updates the prompt immediately.
+Open http://localhost:8000.
+
+## Tests
+
+Requires Node.js 18 or newer:
+
+```sh
+npm test
+```
