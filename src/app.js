@@ -1,7 +1,10 @@
 
 import {
-  getPrompt as getPhotographPrompt
-} from "./photographmodule/index.js";
+  getPrompt as getPhotographPrompt,
+  getOptionMenus,
+  getSelectedOptions,
+  updateOption
+} from "./modules/photography/index.js";
 
 // Tüm modüllerin cümleleri
 const promptSections = new Map();
@@ -23,8 +26,39 @@ function setPromptSection(id, prompt) {
   renderPrompt();
 }
 
+// Seçim menülerini oluştur
+function renderOptionMenus() {
+  const container = document.getElementById("photographOptions");
+  if (!container) return;
+
+  const selectedOptions = getSelectedOptions();
+  container.replaceChildren();
+
+  for (const menu of getOptionMenus()) {
+    const field = document.createElement("div");
+    const label = document.createElement("label");
+    const select = document.createElement("select");
+    select.id = `photograph-${menu.id}`;
+    label.htmlFor = select.id;
+    label.textContent = menu.label;
+
+    for (const option of menu.options) {
+      const element = document.createElement("option");
+      element.value = option.value;
+      element.textContent = option.label;
+      select.append(element);
+    }
+
+    select.value = selectedOptions[menu.id];
+    select.addEventListener("change", () => updateOption(menu.id, select.value));
+    field.append(label, select);
+    container.append(field);
+  }
+}
+
 // Uygulamayı başlat
 function initializeApp() {
+  renderOptionMenus();
   // Photograph modülünün başlangıç cümlesi
   setPromptSection("photograph", getPhotographPrompt());
 

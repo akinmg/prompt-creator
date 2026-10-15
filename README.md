@@ -1,40 +1,30 @@
 # Photography Prompt Builder
 
-Compact card UI with category comboboxes (native HTML `<select>`). No Tailwind dependency needed.
+Build a photography prompt using native HTML select menus. No build step or dependencies are required.
 
 ## Files
 
-- `index.html` — compact page structure with Photography card and prompt preview.
-- `css/style.css` — responsive card and dropdown styling.
-- `js/app.js` — stable core: creates selects automatically and generates prompts.
-- `js/config/index.js` — import and order categories here.
-- `js/config/*.js` — independent values and prompt sentences for each category.
+- `index.html` — page structure and prompt output.
+- `src/app.js` — renders menus and updates the prompt preview.
+- `src/modules/photography/index.js` — selected values, validation, and change events.
+- `src/modules/photography/library/options.js` — menu definitions, order, and default values.
+- `src/modules/photography/library/types.js` — available labels and values.
+- `src/modules/photography/library/prompt.js` — prompt sentence generation.
 
-## Add a new category (no app.js change)
+## Add a category
 
-1. Add `js/config/outfit.js`:
+1. Export its option list from `types.js`.
+2. Import the list into `options.js` and add a menu with `id`, `label`, `options`, and a valid `defaultValue`.
+3. Update `generatePrompt` in `prompt.js` to include the new category's value.
 
-```js
-export const outfit = {
-  id: "outfit",
-  title: "Outfit",
-  defaultValue: "casual",
-  options: [
-    { label: "Casual", value: "casual", prompt: "Dress the subject in an authentic casual outfit." },
-    { label: "Elegant", value: "elegant", prompt: "Style the subject with elegant clothing and natural fabric folds." }
-  ]
-};
-```
-
-2. In `js/config/index.js`, add `import { outfit } from "./outfit.js";` and add `outfit` to `photographyConfig` at your desired position.
-3. Reload the page. The combobox appears automatically, and the chosen prompt text is added as a separate paragraph.
+Menus are rendered automatically from the definitions in `options.js`.
 
 ## Run locally
 
-Since the project uses ES modules, serve its folder over HTTP:
+Serve the repository root over HTTP because the project uses ES modules:
 
 ```bash
 python -m http.server 8000
 ```
 
-Open `http://localhost:8000`. Clipboard copying works on localhost or HTTPS.
+Open http://localhost:8000. Changing a menu updates the prompt immediately.

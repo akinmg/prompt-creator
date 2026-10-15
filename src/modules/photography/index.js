@@ -1,12 +1,12 @@
 
-import { optionMenus } from "./library/types.js";
+import { optionMenus } from "./library/options.js";
 import { generatePrompt } from "./library/prompt.js";
 
 // Modülün seçili değerleri
 const selectedOptions = Object.fromEntries(
-  optionMenus.map(({ id, options }) => [
+  optionMenus.map(({ id, options, defaultValue }) => [
     id,
-    options[0]?.value ?? "",
+    defaultValue ?? options[0]?.value ?? "",
   ])
 );
 
