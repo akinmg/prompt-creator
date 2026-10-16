@@ -15,7 +15,7 @@ import {
   skinToneOptions,
   tanLevelOptions,
   skinTextureOptions,
-} from "./types";
+} from "./types.js";
 
 export const optionMenus = [
   {
