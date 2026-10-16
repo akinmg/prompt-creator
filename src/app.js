@@ -1,18 +1,9 @@
+import { modules } from "./registry.js";
 
-import {
-  getPrompt as getPhotographPrompt,
-  getOptionMenus,
-  getSelectedOptions,
-  updateOption
-} from "./modules/photography/index.js";
-
-// Tüm modüllerin cümleleri
 const promptSections = new Map();
 
-// HTML render
 function renderPrompt() {
   const output = document.getElementById("promptOutput");
-
   if (!output) return;
 
   output.textContent = [...promptSections.values()]
@@ -20,25 +11,23 @@ function renderPrompt() {
     .join("\n\n");
 }
 
-// Modül cümlesi ekle / güncelle
-function setPromptSection(id, prompt) {
-  promptSections.set(id, prompt);
-  renderPrompt();
-}
+function renderModuleMenus(module) {
+  const container = document.getElementById(
+    `${module.id}Options`
+  );
 
-// Seçim menülerini oluştur
-function renderOptionMenus() {
-  const container = document.getElementById("photographOptions");
   if (!container) return;
 
-  const selectedOptions = getSelectedOptions();
+  const selected = module.api.getSelectedOptions();
+
   container.replaceChildren();
 
-  for (const menu of getOptionMenus()) {
+  for (const menu of module.api.getOptionMenus()) {
     const field = document.createElement("div");
     const label = document.createElement("label");
     const select = document.createElement("select");
-    select.id = `photograph-${menu.id}`;
+
+    select.id = `${module.id}-${menu.id}`;
     label.htmlFor = select.id;
     label.textContent = menu.label;
 
@@ -49,27 +38,50 @@ function renderOptionMenus() {
       select.append(element);
     }
 
-    select.value = selectedOptions[menu.id];
-    select.addEventListener("change", () => updateOption(menu.id, select.value));
+    select.value = selected[menu.id];
+
+    select.addEventListener("change", () => {
+  console.log("Seçilen:", menu.id, select.value);
+
+  module.api.updateOption(menu.id, select.value);
+
+  console.log("Yeni prompt:", module.api.getPrompt());
+});
+
     field.append(label, select);
     container.append(field);
   }
 }
 
-// Uygulamayı başlat
 function initializeApp() {
-  renderOptionMenus();
-  // Photograph modülünün başlangıç cümlesi
-  setPromptSection("photograph", getPhotographPrompt());
+  for (const module of modules) {
+    renderModuleMenus(module);
 
-  // Photograph değişikliklerini dinle
-  document.addEventListener("photograph:change", (event) => {
-    setPromptSection("photograph", event.detail.prompt);
-  });
+    promptSections.set(
+      module.id,
+      module.api.getPrompt()
+    );
+
+    document.addEventListener(
+      `${module.id}:change`,
+      (event) => {
+        promptSections.set(
+          module.id,
+          event.detail.prompt
+        );
+
+        renderPrompt();
+      }
+    );
+  }
+
+  renderPrompt();
 }
 
 if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", initializeApp);
+  document.addEventListener("DOMContentLoaded", initializeApp, {
+    once: true,
+  });
 } else {
   initializeApp();
 }

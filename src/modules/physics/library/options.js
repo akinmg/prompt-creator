@@ -1,0 +1,111 @@
+
+import {
+  genderOptions,
+  framePositionOptions,
+  shotTypeOptions,
+  heightOptions,
+  bodyBuildOptions,
+  armShapeOptions,
+  thighShapeOptions,
+  waistShapeOptions,
+  bodyProportionsOptions,
+  bodyShapeOptions,
+  waistWidthOptions,
+  legLengthOptions,
+  skinToneOptions,
+  tanLevelOptions,
+  skinTextureOptions,
+} from "./types";
+
+export const optionMenus = [
+  {
+    id: "gender",
+    label: "Gender",
+    options: genderOptions,
+    defaultValue: "adult woman",
+  },
+  {
+    id: "framePosition",
+    label: "Frame Position",
+    options: framePositionOptions,
+    defaultValue: "center of the frame",
+  },
+  {
+    id: "shotType",
+    label: "Shot Type",
+    options: shotTypeOptions,
+    defaultValue: "full-body shot",
+  },
+  {
+    id: "height",
+    label: "Height",
+    options: heightOptions,
+    defaultValue: "petite, short-statured",
+  },
+  {
+    id: "bodyBuild",
+    label: "Body Build",
+    options: bodyBuildOptions,
+    defaultValue: "softly rounded, slightly plump",
+  },
+  {
+    id: "armShape",
+    label: "Arm Shape",
+    options: armShapeOptions,
+    defaultValue: "naturally full",
+  },
+  {
+    id: "thighShape",
+    label: "Thigh Shape",
+    options: thighShapeOptions,
+    defaultValue: "naturally full",
+  },
+  {
+    id: "waistShape",
+    label: "Waist Shape",
+    options: waistShapeOptions,
+    defaultValue: "soft waistline",
+  },
+  {
+    id: "bodyProportions",
+    label: "Body Proportions",
+    options: bodyProportionsOptions,
+    defaultValue: "realistic proportions",
+  },
+  {
+    id: "bodyShape",
+    label: "Body Shape Restriction",
+    options: bodyShapeOptions,
+    defaultValue: "an exaggerated hourglass figure",
+  },
+  {
+    id: "waistWidth",
+    label: "Waist Width Restriction",
+    options: waistWidthOptions,
+    defaultValue: "an unusually narrow waist",
+  },
+  {
+    id: "legLength",
+    label: "Leg Length Restriction",
+    options: legLengthOptions,
+    defaultValue: "elongated legs",
+  },
+  {
+    id: "skinTone",
+    label: "Skin Tone",
+    options: skinToneOptions,
+    defaultValue: "naturally very fair, pale milky-white",
+  },
+  {
+    id: "tanLevel",
+    label: "Tan Level",
+    options: tanLevelOptions,
+    defaultValue: "no visible tan",
+  },
+  {
+    id: "skinTexture",
+    label: "Skin Texture",
+    options: skinTextureOptions,
+    defaultValue: "realistic skin texture",
+  },
+];

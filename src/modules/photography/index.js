@@ -40,7 +40,7 @@ export function updateOption(id, value) {
   selectedOptions[id] = value;
 
   document.dispatchEvent(
-    new CustomEvent("photograph:change", {
+   new CustomEvent("photography:change",  {
       detail: {
         prompt: getPrompt(),
         selectedOptions: getSelectedOptions(),

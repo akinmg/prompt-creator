@@ -1,10 +1,10 @@
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Prompt Generator</title>
+
+  <title>AI Photography Prompt Generator</title>
 
   <style>
     #promptOutput {
@@ -14,12 +14,24 @@
 </head>
 <body>
 
-  <!-- Photograph option menülerinin alanı -->
-  <div id="photographOptions"></div>
+  <!-- Tüm modüllerin seçenek menüleri -->
+  <main id="moduleOptions">
 
-  <!-- Tüm prompt cümlelerinin toplandığı alan -->
-  <div id="promptOutput"></div>
+    <section id="photographyOptions"></section>
+
+    <!-- Yeni modüller buraya eklenebilir -->
+    <section id="lightingOptions"></section>
+    <section id="backgroundOptions"></section>
+
+  </main>
+
+  <!-- Birleştirilmiş final prompt -->
+  <section>
+    <h2>Generated Prompt</h2>
+    <div id="promptOutput"></div>
+  </section>
 
   <script type="module" src="./src/app.js"></script>
+
 </body>
 </html>
