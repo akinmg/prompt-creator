@@ -1,5 +1,6 @@
+
 import * as photography from "./modules/photography/index.js";
-import * as physics from "./modules/physics/index.js"
+import * as physics from "./modules/physics/index.js";
 
 export const modules = [
   {
@@ -8,9 +9,8 @@ export const modules = [
     api: photography,
   },
   {
-    id: "pysics",
+    id: "physics",
     label: "Physics",
     api: physics,
-  }
-  
+  },
 ];
